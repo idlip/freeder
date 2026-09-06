@@ -1,0 +1,52 @@
+[project]
+name = "fread"
+version = "0.1.0"
+description = "Frappe RSS/Atom Feed Reader"
+authors = [
+    { email = "hi@idlip.in" },
+]
+readme = { file = "Readme.org", content-type = "text/plain" }
+requires-python = ">=3.14,<3.15"
+dependencies = []
+
+[tool.uv]
+# no fread/ module exists yet (Stage 1 will add it)
+package = false
+
+# for bench / Frappe Cloud to resolve this as a Frappe app
+[tool.bench.frappe-dependencies]
+frappe = ">=16,<17"
+
+# other frappe apps required only when developer_mode is on -- none yet
+[tool.bench.dev-dependencies]
+
+[dependency-groups]
+dev = [
+    "ruff>=0.16.6",
+    "semgrep>=1.176.1",
+    "ty>=0.0.78",
+]
+
+[tool.ruff]
+line-length = 99
+target-version = "py314"
+fix = true
+# development/frappe-semgrep-rules is a vendored submodule of Frappe's own
+# semgrep test fixtures (deliberately bad example code)
+exclude = ["development/", ".venv/"]
+
+[tool.ruff.lint]
+select = ["F", "E", "W", "I", "B", "UP", "RUF"]
+typing-modules = ["frappe.types.DF"]
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+docstring-code-format = true
+
+[tool.ty.rules]
+possibly-unresolved-reference = "warn"
+division-by-zero = "ignore"
+
+[tool.ty.environment]
+# extra-paths = ["../frappe/"]  # uncomment once this app sits inside a bench's
