@@ -1,0 +1,87 @@
+#+title: Frappe RSS/Atom Feed Reader
+
+* fread
+  :PROPERTIES:
+  :CUSTOM_ID: fread
+  :END:
+
+Frappe Framework app for reading RSS, Atom & JSON feeds. Minimal, framework-first, no bloat. fread stays close to Frappe's own primitives (DocTypes, permissions, background jobs, whitelisted methods) and reaches for a dependency only when the framework genuinely has no answer.
+
+- Inspired by [[https://miniflux.app/opinionated.html][Miniflux]]'s opinionated minimalism and [[https://freshrss.org/][FreshRSS]]'s feature completeness, built the [[https://frappe.io/framework][Frappe]] way : Desk first, permissions from roles, background jobs from the scheduler.
+
+- Is it for everywhere to self host?
+No, miniflux and freshrss is what you need to get
+
+Fread is only meant for organisation (& its people) that already uses frappe framework and would like to get a feed reader with that.
+
+
+** Philosophy
+   :PROPERTIES:
+   :CUSTOM_ID: philosophy
+   :END:
+
+- *Core* :: Fetch RSS/Atom/JSON feeds, parse them, store items, show them well. That is the whole job.
+
+- *Framework-first* :: Reach for =frappe.model=, =frappe.db=, the permission system, the job scheduler, and whitelisted methods before writing anything custom. A dependency or a custom module is added only when the framework has no answer, feed parsing (=feedparser=) being the one clear example.
+
+- *Configurable* :: Anything beyond the core loop, fetch interval, retention, dashboard on/off, lives in settings. The core code path stays simple; the bells and whistles are opt-in.
+
+- *Secure* :: Access is controlled entirely through Frappe's own role and permission system.
+
+- *Documentation* :: Code as docs.Tests double as the spec: written first, one behavior at a time, then the minimal code to satisfy them, committed atomically.
+
+- *Staged* :: Desk-only backend first, gated behind roles. A dashboard comes only once the backend is solid, and only for sites that choose to turn it on. Protocol/API extensibility comes last.
+
+** Stages
+   :PROPERTIES:
+   :CUSTOM_ID: stages
+   :END:
+
+1. *Backend, Desk-only* :: DocTypes for feeds, items, folders, and settings; a scheduled job that fetches and parses feeds; read/unread and starred state; all of it usable directly from Desk, gated by role. No custom frontend at this stage.
+
+2. *Dashboard, opt-in* :: A Vue + frappe-ui reading dashboard for any site that turns it on in settings, so any account with the right role can read without ever opening Desk.
+
+3. *Extensibility* :: A whitelisted REST surface so other tools can read and manage feeds/items. Standard reader-protocol compatibility (Fever, Google Reader API) is evaluated here too, but only if it does not pull the core away from being a good self-hosted reader first.
+
+** Roadmap
+   :PROPERTIES:
+   :CUSTOM_ID: roadmap
+   :END:
+
+   *Stage 1 :: Backend (Desk-only)*
+
+   - [ ] Feed DocType :: url, title, favicon, folder link, per-feed fetch interval override, last
+     fetched, active toggle
+   - [ ] Item DocType :: feed link, title, url, author, published date, summary/content, guid for
+     dedup
+   - [ ] Folder/Category DocType to group feeds
+   - [ ] Scheduled fetch job (=feedparser=), respecting per-feed interval with a global default
+   - [ ] Dedup on fetch via guid/link hash, no duplicate items on re-fetch
+   - [ ] Per-user read/unread and starred state, so shared feeds still track state per reader
+   - [ ] OPML import/export
+   - [ ] Roles :: e.g. "Fread User" and "Fread Manager", any site's existing roles can be granted
+     either
+   - [ ] Desk list/report views tuned for reading :: unread/starred/folder filters, sane defaults
+   - [ ] Fread Settings (single doctype) :: default fetch interval (+ per feed), retention period, max items per feed, dashboard on/off
+   - [ ] Retention/cleanup job, old items do not grow the database forever
+   - [ ] Feed health :: last success, consecutive failure count, auto-disable after N failures
+   - [ ] Full-text search over items via Frappe's global search (indexing might be very bad)
+     Search needs to be provided via dashboard if so.
+
+   *Stage 2 :: Dashboard (opt-in)*
+
+   - [ ] Dashboard toggle in Fread Settings
+   - [ ] Three-pane Vue + frappe-ui app :: feeds/folders, item list, reading pane
+   - [ ] Keyboard navigation (=j=/=k=, mark read, star, open)
+   - [ ] Mark all as read, per feed/folder/global
+   - [ ] In-dashboard search
+   - [ ] Light/dark theme
+   - [ ] Mobile-responsive layout
+   - [ ] Per-user preferences :: items per page, sort order, default view
+
+   *Stage 3 :: Extensibility*
+
+   - [ ] Whitelisted REST API for feeds/items/read-state, documented for third-party clients
+   - [ ] Per-user API tokens via Frappe's existing auth, no custom scheme
+   - [ ] Evaluate Fever API / Google Reader API compatibility for existing mobile reader apps
+   - [ ] Saved-filter webhooks/notifications (stretch)
