@@ -1,5 +1,5 @@
 [project]
-name = "fread"
+name = "freeder"
 version = "0.1.0"
 description = "Frappe RSS/Atom Feed Reader"
 authors = [
@@ -10,7 +10,7 @@ requires-python = ">=3.14,<3.15"
 dependencies = []
 
 [tool.uv]
-# no fread/ module exists yet (Stage 1 will add it)
+# no freeder/ module exists yet (Stage 1 will add it)
 package = false
 
 # for bench / Frappe Cloud to resolve this as a Frappe app

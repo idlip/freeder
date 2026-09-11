@@ -1,18 +1,16 @@
-#+title: Frappe RSS/Atom Feed Reader
-
-* fread
+* Freeder: Frappe RSS/Atom Feed Reader
   :PROPERTIES:
-  :CUSTOM_ID: fread
+  :CUSTOM_ID: freeder
   :END:
 
-Frappe Framework app for reading RSS, Atom & JSON feeds. Minimal, framework-first, no bloat. fread stays close to Frappe's own primitives (DocTypes, permissions, background jobs, whitelisted methods) and reaches for a dependency only when the framework genuinely has no answer.
+Frappe Framework app for reading RSS, Atom & JSON feeds. Minimal, framework-first, no bloat. freeder stays close to Frappe's own primitives (DocTypes, permissions, background jobs, whitelisted methods) and reaches for a dependency only when the framework genuinely has no answer.
 
 - Inspired by [[https://miniflux.app/opinionated.html][Miniflux]]'s opinionated minimalism and [[https://freshrss.org/][FreshRSS]]'s feature completeness, built the [[https://frappe.io/framework][Frappe]] way : Desk first, permissions from roles, background jobs from the scheduler.
 
 - Is it for everywhere to self host?
 No, miniflux and freshrss is what you need to get
 
-Fread is only meant for organisation (& its people) that already uses frappe framework and would like to get a feed reader with that.
+Freeder is only meant for organisation (& its people) that already uses frappe framework and would like to get a feed reader with that.
 
 
 ** Philosophy
@@ -50,34 +48,34 @@ Fread is only meant for organisation (& its people) that already uses frappe fra
 
    *Stage 1 :: Backend (Desk-only)*
 
-   - [ ] Feed DocType :: url, title, favicon, folder link, per-feed fetch interval override, last
+   - [ ] Feed DocType : url, title, favicon, folder link, per-feed fetch interval override, last
      fetched, active toggle
-   - [ ] Item DocType :: feed link, title, url, author, published date, summary/content, guid for
+   - [ ] Item DocType : feed link, title, url, author, published date, summary/content, guid for
      dedup
    - [ ] Folder/Category DocType to group feeds
    - [ ] Scheduled fetch job (=feedparser=), respecting per-feed interval with a global default
    - [ ] Dedup on fetch via guid/link hash, no duplicate items on re-fetch
    - [ ] Per-user read/unread and starred state, so shared feeds still track state per reader
    - [ ] OPML import/export
-   - [ ] Roles :: e.g. "Fread User" and "Fread Manager", any site's existing roles can be granted
+   - [ ] Roles : Mostly use "Website Manager" and then fallback e.g. "Freeder User" and "Freeder Manager", any site's existing roles can be granted
      either
-   - [ ] Desk list/report views tuned for reading :: unread/starred/folder filters, sane defaults
-   - [ ] Fread Settings (single doctype) :: default fetch interval (+ per feed), retention period, max items per feed, dashboard on/off
+   - [ ] Desk list/report views tuned for reading : unread/starred/folder filters, sane defaults
+   - [ ] Freeder Settings (single doctype) : default fetch interval (+ per feed), retention period, max items per feed, dashboard on/off
    - [ ] Retention/cleanup job, old items do not grow the database forever
-   - [ ] Feed health :: last success, consecutive failure count, auto-disable after N failures
+   - [ ] Feed health : last success, consecutive failure count, auto-disable after N failures
    - [ ] Full-text search over items via Frappe's global search (indexing might be very bad)
      Search needs to be provided via dashboard if so.
 
    *Stage 2 :: Dashboard (opt-in)*
 
-   - [ ] Dashboard toggle in Fread Settings
-   - [ ] Three-pane Vue + frappe-ui app :: feeds/folders, item list, reading pane
+   - [ ] Dashboard toggle in Freeder Settings
+   - [ ] Three-pane Vue + frappe-ui app : feeds/folders, item list, reading pane
    - [ ] Keyboard navigation (=j=/=k=, mark read, star, open)
    - [ ] Mark all as read, per feed/folder/global
    - [ ] In-dashboard search
    - [ ] Light/dark theme
    - [ ] Mobile-responsive layout
-   - [ ] Per-user preferences :: items per page, sort order, default view
+   - [ ] Per-user preferences : items per page, sort order, default view
 
    *Stage 3 :: Extensibility*
 

@@ -1,7 +1,7 @@
 { pkgs ? import <nixpkgs> { } }:
 
 pkgs.mkShell {
-  name = "fread-dev";
+  name = "freeder-dev";
 
   buildInputs = with pkgs; [
     python314
